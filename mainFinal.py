@@ -124,6 +124,7 @@ def main():
                     M, N = getM_Value(getLevelInspect(size_lote, lvl_insp), NCA_L, type_inspection)
                     st.write("El valor M es: ", M)
                     st.write("El tamaño de muestra es : ", N)
+                    agregar_a_historial(f"M: {M} y N: {N}")
     
                 
                 # NCA = st.number_input("NCA %", min_value=0.0, max_value=100.0, value=1.0, step=1.0)
@@ -153,6 +154,7 @@ def main():
                     Zei = (media - EI) / desviacion
                     st.write("Zes ", Zes)
                     st.write("Zei ", Zei)
+                    agregar_a_historial(f"Zes: {Zes} y Zei: {Zei}")
     
                 size_n = st.number_input(
                     "Tamaño de muestra"
@@ -168,6 +170,7 @@ def main():
                         st.error('Todos los campos son obligatorios. Por favor, introduce valores en todos los campos.')
                     valuep = getP_ZTable(int(size_n), Zto_find)
                     st.write("El valor es: ", valuep)
+                    agregar_a_historial(f"Valor z encontrado en tabla{valuep}")
         if choice == "Tablas MIL STD":
     
             name_table = st.selectbox(
@@ -203,6 +206,7 @@ def main():
     
                     # print(lcs, lcsv2)
                     st.write("LCS: ", lcsv2)
+                    agregar_a_historial(f"LCS: {lcsv2}")
                     st.write("LCI: ", 0)
                     st.dataframe(t2)
                     fig, ax = plt.subplots()
