@@ -46,15 +46,15 @@ def main():
         col1, col2 = st.columns(2)
         
         with col1:
-            AQL = st.number_input("AQL", min_value=0.0, max_value=1.0, value=0.05, step=0.01)
-            LTPD = st.number_input("LTPD", min_value=0.0, max_value=1.0, value=0.10, step=0.01)
+            NCA = st.number_input("NCA", min_value=0.0, max_value=1.0, value=0.05, step=0.01)
+            NCL = st.number_input("NCL", min_value=0.0, max_value=1.0, value=0.10, step=0.01)
         
         with col2:
             alpha = st.number_input("Alpha", min_value=0.0, max_value=1.0, value=0.05, step=0.01)
             beta = st.number_input("Beta", min_value=0.0, max_value=1.0, value=0.10, step=0.01)
 
         if st.button("Calcular n y c"):
-            n_calc, c_calc = cameron_sampling_plan(AQL, LTPD, alpha, beta)
+            n_calc, c_calc = cameron_sampling_plan(NCA, NCL, alpha, beta)
             st.session_state['n_calc'] = n_calc
             st.session_state['c_calc'] = c_calc
             st.write(f"Tamaño de muestra calculado (n): {n_calc}")
