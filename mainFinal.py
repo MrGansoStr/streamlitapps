@@ -13,6 +13,7 @@ from planmuestreoMIL.showTables import showTable
 
 from cartas_control.main import hotelling_t2_control_chart, calculate_LCS
 
+from taguchi.main_taguchi import *
 
 
 def main():
@@ -218,6 +219,45 @@ def main():
                     ax.set_xlabel("Muestra")
                     ax.set_ylabel("T2")
                     st.pyplot(fig)
+        elif choice == "Filosofía de Taguchi":
+            num_factors = st.number_input("Número de factores", min_value=2, max_value=10, value=3)
+            num_levels = st.number_input("Número de niveles por factor", min_value=2, max_value=5, value=3)
+            matrix = generate_taguchi_matrix(num_factors, num_levels)
+            if matrix is not None:
+                st.subheader("Matriz ortogonal de Taguchi")
+                st.dataframe(matrix)
+            results = []
+            for i in range(len(matrix)):
+                result = st.number_input(f"Resultado del experimento {i+1}", value=0.0, key=f"result_{i}")
+                results.append(result)
+            quality_characteristic = st.selectbox(
+                "Seleccione la característica de calidad",
+                ("Nominal es mejor", "Menor es mejor", "Mayor es mejor")
+            )
+            if st.button("Calcular efectos y relación S/N"):
+                effects = calculate_main_effects(matrix, results, num_factors, num_levels)
+                sn_ratio = calculate_sn_ratio(results, quality_characteristic)
+                
+                st.subheader("Efectos principales")
+                for i, effect in enumerate(effects):
+                    st.write(f"Factor {i+1}: {effect}")
+                
+                st.subheader("Relación Señal-Ruido (S/N)")
+                st.write(f"{quality_characteristic}: {sn_ratio:.2f} dB")
+            
+                # Calcular el mejor nivel para cada factor
+                best_levels = []
+                for effect in effects:
+                    if quality_characteristic in ["Mayor es mejor", "Nominal es mejor"]:
+                        best_level = np.argmax(effect) + 1
+                    else:  # Menor es mejor
+                        best_level = np.argmin(effect) + 1
+                    best_levels.append(best_level)
+                
+                st.subheader("Niveles óptimos")
+                for i, level in enumerate(best_levels):
+                    st.write(f"Factor {i+1}: Nivel {level}")
+
     # Mostrar el historial global en una sección separada
     with main_col2:
 
